@@ -1,0 +1,248 @@
+@import "tailwindcss";
+
+/*
+ * Enables `dark:` variants to be toggled by a `.dark` class on <html>
+ * (set by the theme provider) instead of only following OS preference.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+ * DESIGN TOKENS
+ * This is the single source of truth for the visual foundation. Nothing
+ * downstream (components, pages) should hard-code a color, radius, shadow,
+ * or font — it should reference one of these tokens so the whole site can
+ * be restyled from one place.
+ *
+ * Palette: an ink/paper neutral pair with a brass/gold accent — chosen to
+ * read as a considered, premium services brand rather than a generic
+ * SaaS-card or cream-and-terracotta default.
+ * ------------------------------------------------------------------------- */
+@theme {
+  /* Typography --------------------------------------------------------- */
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui,
+    -apple-system, sans-serif;
+
+  /* A restrained type scale (major third-ish, hand-tuned) */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.55;
+  --text-base: 1rem;
+  --text-base--line-height: 1.65;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.6;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.5;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.25;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.15;
+  --text-4xl: 2.875rem;
+  --text-4xl--line-height: 1.1;
+  --text-5xl: 3.75rem;
+  --text-5xl--line-height: 1.05;
+
+  /* Color: ink / paper neutrals ---------------------------------------- */
+  --color-ink-950: #101114;
+  --color-ink-900: #17181c;
+  --color-ink-800: #24262b;
+  --color-ink-700: #34363d;
+  --color-ink-600: #4a4d56;
+  --color-ink-500: #64676f;
+  --color-ink-400: #8a8d94;
+  --color-ink-300: #b3b5ba;
+  --color-ink-200: #dcdde0;
+  --color-ink-100: #edeeef;
+  --color-ink-50: #f6f6f7;
+
+  --color-paper-950: #0f0f0e;
+  --color-paper-100: #f7f6f3;
+  --color-paper-50: #fcfbf9;
+
+  /* Color: brass accent (the one deliberate, saturated color) ----------- */
+  --color-brass-700: #7a5c22;
+  --color-brass-600: #96762c;
+  --color-brass-500: #ab8938;
+  --color-brass-400: #c3a457;
+  --color-brass-300: #dcc788;
+  --color-brass-200: #ecdfbd;
+  --color-brass-100: #f5efdd;
+
+  /* Semantic feedback colors (kept quiet, only used where meaningful) --- */
+  --color-success-600: #2f6f4e;
+  --color-success-100: #e2f2e9;
+  --color-danger-600: #a13a35;
+  --color-danger-100: #f6e3e1;
+
+  /* Radius system -------------------------------------------------------- */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 2rem;
+
+  /* Shadow system: ink-tinted, not generic grey -------------------------- */
+  --shadow-xs: 0 1px 2px 0 rgb(16 17 20 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(16 17 20 / 0.07), 0 1px 2px -1px rgb(16 17 20 / 0.06);
+  --shadow-md: 0 6px 16px -4px rgb(16 17 20 / 0.10), 0 2px 6px -2px rgb(16 17 20 / 0.07);
+  --shadow-lg: 0 16px 32px -8px rgb(16 17 20 / 0.16), 0 4px 12px -4px rgb(16 17 20 / 0.08);
+
+  /* Section rhythm / spacing extensions ---------------------------------- */
+  --spacing-section-sm: 3.5rem;
+  --spacing-section: 6rem;
+  --spacing-section-lg: 8.5rem;
+
+  /* Container ------------------------------------------------------------ */
+  --container-content: 72rem; /* 1152px — prose/section width */
+  --container-wide: 90rem; /* 1440px — full-bleed section width */
+
+  /* Motion ----------------------------------------------------------------*/
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------------------------------------------------------------------------
+ * THEME MAPPING
+ * Semantic aliases that components should reach for (bg-surface,
+ * text-foreground, etc.) instead of raw palette steps. Redefined per theme
+ * below so light/dark is a one-line switch, not a per-component branch.
+ * ------------------------------------------------------------------------- */
+:root {
+  --background: var(--color-paper-50);
+  --surface: #ffffff;
+  --surface-muted: var(--color-ink-50);
+  --foreground: var(--color-ink-900);
+  --foreground-muted: var(--color-ink-500);
+  --border: var(--color-ink-200);
+  --accent: var(--color-brass-600);
+  --accent-foreground: var(--color-paper-50);
+  --accent-muted: var(--color-brass-100);
+  /* Accent for small text/links: darker in light mode to meet AA contrast. */
+  --accent-text: var(--color-brass-700);
+  --focus-ring: var(--color-brass-500);
+}
+
+.dark {
+  --background: var(--color-ink-950);
+  --surface: var(--color-ink-900);
+  --surface-muted: var(--color-ink-800);
+  --foreground: var(--color-ink-50);
+  --foreground-muted: var(--color-ink-300);
+  --border: var(--color-ink-700);
+  --accent: var(--color-brass-400);
+  --accent-foreground: var(--color-ink-950);
+  --accent-muted: var(--color-ink-800);
+  --accent-text: var(--color-brass-400);
+  --focus-ring: var(--color-brass-300);
+}
+
+/* ---------------------------------------------------------------------------
+ * BASE LAYER
+ * ------------------------------------------------------------------------- */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  /* Visible, deliberate focus state — never removed, only restyled. */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * COMPONENT-LEVEL FOUNDATIONS
+ * Small, composable primitives. Kept as CSS classes (rather than only
+ * Tailwind utility soup in JSX) so the button/card "look" can be tuned in
+ * one place as the design matures in later phases.
+ * ------------------------------------------------------------------------- */
+@layer components {
+  .surface-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .container-content,
+  .container-wide {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  .container-content {
+    max-width: var(--container-content);
+  }
+
+  .container-wide {
+    max-width: var(--container-wide);
+  }
+
+  @media (min-width: 768px) {
+    .container-content,
+    .container-wide {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-content,
+    .container-wide {
+      padding-inline: 3rem;
+    }
+  }
+
+  /* Consistent in-content and nav link treatment: an underline that
+     grows in on hover, tinted with the accent, rather than a color
+     jump alone. Used by nav links, footer links, and body-copy links. */
+  .link {
+    text-underline-offset: 3px;
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    transition:
+      text-decoration-color 150ms var(--ease-out-soft),
+      color 150ms var(--ease-out-soft);
+  }
+
+  .link:hover {
+    color: var(--accent-text);
+    text-decoration-color: var(--accent-text);
+  }
+}
